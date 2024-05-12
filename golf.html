@@ -69,6 +69,52 @@
         background-color: #00a3e6;
         font-size: 40px;
     }
+    /* Add style for the scorecard table */
+    .scorecard-container {
+      overflow-x: auto;
+      max-width: 100%;
+      margin-top: 0; /* Adjusted margin-top */
+      position: fixed;
+      top: 0; /* Placing the table at the top */
+      background-color: white; /* Match background color */
+      z-index: 1; /* Ensure it's above other content */
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      text-align: center;
+      padding: 8px;
+    }
+    th:first-child, td:first-child {
+      position: sticky;
+      left: 0;
+      background-color: #f2f2f2;
+      z-index: 1;
+    }
+    th:last-child, td:last-child {
+      position: sticky;
+      right: 0;
+      background-color: #f2f2f2;
+      z-index: 1;
+    }
+    .editable-name {
+      width: 60px; /* Set width for editable names */
+      text-align: center;
+      border: none;
+      outline: none;
+    }
+    .shot-count {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .shot-count button {
+      font-size: 20px;
+      padding: 5px 10px;
+    }
   </style>
 </head>
 <body>
@@ -82,11 +128,12 @@
         <button onclick="incrementPlayerCount()">+</button>
       </div>
     </div>
-    <button id="startButton">START</button>
+    <button id="startButton" onclick="startGame()">START</button>
     <div class="bottom-text">
         <p>Lost a ball? Ask us for a new one!</p>
         <p>For your safety: stay off rocks and waterways.</p>
         <p>Six putts max per hole to keep play under 1.5 hours.</p>
+        <p>⛳DAN⛳</p>
     </div>
   </div>
 
@@ -105,6 +152,127 @@
         playerCount--;
         document.getElementById('playerCount').innerText = playerCount;
       }
+    }
+
+    function startGame() {
+      // Hide elements
+      document.getElementById('logo').style.display = 'none';
+      document.querySelector('.number-of-players').style.display = 'none';
+      document.getElementById('startButton').style.display = 'none';
+
+      // Create table dynamically
+      const scorecardContainer = document.createElement('div');
+      scorecardContainer.classList.add('scorecard-container');
+
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+
+      // Create header row
+      const headerRow = document.createElement('tr');
+      const nameHeader = document.createElement('th');
+      nameHeader.textContent = 'Player Name';
+      headerRow.appendChild(nameHeader);
+      for (let i = 1; i <= 18; i++) {
+        const holeHeader = document.createElement('th');
+        holeHeader.textContent = `Hole ${i}`;
+        headerRow.appendChild(holeHeader);
+      }
+      const totalHeader = document.createElement('th');
+      totalHeader.textContent = 'Total';
+      headerRow.appendChild(totalHeader);
+
+      thead.appendChild(headerRow);
+
+      // Create player rows
+      for (let i = 1; i <= playerCount; i++) {
+        const playerRow = document.createElement('tr');
+
+        // Create editable player name
+        const playerNameCell = document.createElement('td');
+        const playerNameInput = document.createElement('input');
+        playerNameInput.setAttribute('type', 'text');
+        playerNameInput.setAttribute('maxlength', '10');
+        playerNameInput.classList.add('editable-name');
+        playerNameInput.value = `Player ${i}`;
+        playerNameCell.appendChild(playerNameInput);
+        playerRow.appendChild(playerNameCell);
+
+        // Create shot count cells
+        for (let j = 1; j <= 18; j++) {
+          const shotCountCell = document.createElement('td');
+          const shotCountContainer = document.createElement('div');
+          shotCountContainer.classList.add('shot-count');
+
+          // Create decrement button
+          const decrementButton = document.createElement('button');
+          decrementButton.textContent = '-';
+          decrementButton.addEventListener('click', () => {
+            decrementShotCount(shotCountContainer);
+          });
+
+          // Create shot count display
+          const shotCountDisplay = document.createElement('span');
+          shotCountDisplay.textContent = '0';
+          shotCountContainer.appendChild(decrementButton);
+          shotCountContainer.appendChild(shotCountDisplay);
+
+          // Create increment button
+          const incrementButton = document.createElement('button');
+          incrementButton.textContent = '+';
+          incrementButton.addEventListener('click', () => {
+            incrementShotCount(shotCountContainer);
+          });
+
+          shotCountContainer.appendChild(incrementButton);
+          shotCountCell.appendChild(shotCountContainer);
+          playerRow.appendChild(shotCountCell);
+        }
+
+        // Create total cell
+        const totalCell = document.createElement('td');
+        totalCell.textContent = '0';
+        playerRow.appendChild(totalCell);
+
+        tbody.appendChild(playerRow);
+      }
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      scorecardContainer.appendChild(table);
+
+      document.body.appendChild(scorecardContainer);
+    }
+
+    function decrementShotCount(container) {
+      const shotCountDisplay = container.querySelector('span');
+      let count = parseInt(shotCountDisplay.textContent);
+      if (count > 0) {
+        count--;
+        shotCountDisplay.textContent = count;
+        updateTotal(container);
+      }
+    }
+
+    function incrementShotCount(container) {
+      const shotCountDisplay = container.querySelector('span');
+      let count = parseInt(shotCountDisplay.textContent);
+      if (count < 6) {
+        count++;
+        shotCountDisplay.textContent = count;
+        updateTotal(container);
+      }
+    }
+
+    function updateTotal(container) {
+      const playerRow = container.parentNode.parentNode;
+      const shotCountCells = playerRow.querySelectorAll('.shot-count span');
+      let total = 0;
+      shotCountCells.forEach(cell => {
+        total += parseInt(cell.textContent);
+      });
+      const totalCell = playerRow.querySelector('td:last-child');
+      totalCell.textContent = total;
     }
   </script>
 </body>
