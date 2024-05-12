@@ -10,7 +10,7 @@
       padding: 0;
       height: 100%;
       font-family: Arial, sans-serif;
-      background-color: white; /* Set background color */
+      background-color:#00a3e6; /* Set background color */
     }
     .container {
       display: flex;
@@ -40,6 +40,7 @@
       text-align: center;
       position: absolute;
       bottom: 1%;
+      color: #ffffff;
     }
     .bottom-text p {
       margin: 5px 0; /* Adjust margin to reduce spacing */
@@ -85,10 +86,14 @@
       margin: 20px auto; /* Center the table */
     }
     th, td {
-      border: 3px solid black;
+      border: 4px solid black;
       text-align: center;
       padding: 16px; /* Increased padding */
       font-size: 24px; /* Increased font size */
+    }
+    th {
+        background-color: #00a3e6;
+        color: #ffffff;
     }
     th:first-child, td:first-child {
       position: sticky;
@@ -129,16 +134,16 @@
 </head>
 <body>
   <div class="container">
-    <img id="logo" src="/images/logo.svg" alt="Mini Golf Logo">
+    <img id="logo" src="/images/cascadepicture.jpg" alt="Mini Golf Logo">
     <div class="number-of-players">
-      <label for="playerCount">Number of Players</label>
+      <label for="playerCount">Add Players</label>
       <div class="player-buttons">
         <button onclick="decrementPlayerCount()">-</button>
         <span id="playerCount" class="player-value">1</span>
         <button onclick="incrementPlayerCount()">+</button>
       </div>
     </div>
-    <button id="startButton" onclick="startGame()">START</button>
+    <button id="startButton" onclick="startGame()">⛳START⛳</button>
     <div class="bottom-text">
         <p>Lost a ball? Ask us for a new one!</p>
         <p>For your safety: stay off rocks and waterways.</p>
@@ -202,7 +207,7 @@
         const playerNameCell = document.createElement('td');
         const playerNameInput = document.createElement('input');
         playerNameInput.setAttribute('type', 'text');
-        playerNameInput.setAttribute('maxlength', '10');
+        playerNameInput.setAttribute('maxlength', '8');
         playerNameInput.classList.add('editable-name');
         playerNameInput.value = `Player ${i}`;
         playerNameCell.appendChild(playerNameInput);
