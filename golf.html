@@ -13,6 +13,8 @@
         h1 {
             text-align: center; /* Center align the title */
             font-size: 2em; /* Increase font size of the title */
+            color: rgb(55, 148, 255); 
+            display: none;
         }
         #start-message {
             display: flex;
@@ -30,6 +32,7 @@
         }
         #slider-container {
             font-size: 1.4em;
+            text-align: center;
         }
         #scorecard-container {
             display: none; /* Initially hide the scorecard */
@@ -76,7 +79,6 @@
             border: none;
       
         }
-    
         .minus-btn {
             left: 0;
             font-size: 1.3em;
@@ -85,13 +87,18 @@
             right: 0;
             font-size: 1.3em;
         }
+        img{
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
     
     <h1>Cascade Putting Course</h1>
+    
     <div id="start-message">
-        <img src="/images/logo.svg" alt="blue mountain logo";">
+        <img src="/images/logo.svg" alt="blue mountain logo";>
+        <img obje
         <p>Lost a ball? Ask us for a new one!</p>
         <p>For your safety: stay off rocks, gardens and waterways.</p>
         <p>Please ensure a 6 putt maximum to keep play under 1.5 hours.</p>
@@ -101,7 +108,7 @@
     <div id="scorecard-container">
         <div id="slider-container">
             <label for="player-slider">Number of Players:</label>
-            <input type="range" id="player-slider" min="1" max="6" value="2" onchange="updatePlayerCount()">
+            <input type="range" id="player-slider" min="1" max="5" value="2" onchange="updatePlayerCount()">
             <span id="player-count-label">2</span>
         </div>
 
@@ -114,7 +121,6 @@
                     <th id="player3-label" class="player-label" contenteditable="true">Player 3</th>
                     <th id="player4-label" class="player-label" contenteditable="true">Player 4</th>
                     <th id="player5-label" class="player-label" contenteditable="true">Player 5</th>
-                    <th id="player6-label" class="player-label" contenteditable="true">Player 6</th>
                 </tr>
             </thead>
             <tbody id="scorecard-body">
@@ -141,7 +147,7 @@
             document.getElementById('player-count-label').textContent = numPlayers;
 
             // Update player labels
-            for (let i = 1; i <= 6; i++) {
+            for (let i = 1; i <= 5; i++) {
                 const playerLabel = document.getElementById('player' + i + '-label');
                 if (i <= numPlayers) {
                     playerLabel.style.display = 'table-cell';
