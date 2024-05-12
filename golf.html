@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini Golf Score Card</title>
   <style>
+    /* Your existing CSS styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -156,6 +157,12 @@
 
   <script>
     let playerCount = 1;
+    let savedScores = localStorage.getItem('miniGolfScores');
+    if (savedScores) {
+      savedScores = JSON.parse(savedScores);
+    } else {
+      savedScores = {};
+    }
 
     function incrementPlayerCount() {
       if (playerCount < 5) {
@@ -172,7 +179,8 @@
     }
 
     function startGame() {
-      // Hide elements
+      // Your existing startGame function code...
+     // Hide elements
       document.getElementById('logo').style.display = 'none';
       document.querySelector('.number-of-players').style.display = 'none';
       document.getElementById('startButton').style.display = 'none';
@@ -261,6 +269,19 @@
 
       document.body.appendChild(scorecardContainer);
     }
+      // After creating the scorecard, populate with saved scores if available
+      for (let i = 1; i <= playerCount; i++) {
+        const playerName = document.querySelector(`#player-${i} input`).value;
+        const savedPlayerScores = savedScores[playerName];
+        if (savedPlayerScores) {
+          const shotCountCells = document.querySelector(`#player-${i}`).querySelectorAll('.shot-count span');
+          for (let j = 0; j < 18; j++) {
+            shotCountCells[j].textContent = savedPlayerScores[j] || '0';
+          }
+          updateTotal(document.querySelector(`#player-${i}`).querySelector('.shot-count'));
+        }
+      }
+    
 
     function decrementShotCount(container) {
       const shotCountDisplay = container.querySelector('span');
@@ -292,6 +313,20 @@
       const totalCell = playerRow.querySelector('td:last-child');
       totalCell.textContent = total;
     }
+
+    function resetScores() {
+      localStorage.removeItem('miniGolfScores');
+      location.reload(); // Reload the page to clear the scores
+    }
   </script>
+
+  <!-- Scorecard container -->
+  <div id="scorecardContainer" class="scorecard-container" style="display: none;">
+    <!-- Scorecard dynamically created by JavaScript -->
+  </div>
+
+  <!-- Reset button -->
+  <button onclick="resetScores()">Reset Scores</button>
+
 </body>
 </html>
