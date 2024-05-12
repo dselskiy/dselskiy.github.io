@@ -27,6 +27,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-bottom: 20px; /* Add margin at the bottom */
     }
     #logo {
       max-width: 80%;
@@ -35,19 +36,59 @@
     }
     .bottom-text {
       text-align: center;
-      
+    }
+    .bottom-text p {
+      margin: 5px 0; /* Adjust margin to reduce spacing */
+    }
+    .number-of-players {
+      text-align: center;
+      margin-bottom: 10px; /* Add margin to separate from START button */
+    }
+    .player-buttons button {
+      padding: 5px 10px;
+      font-size: 18px;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <img id="logo" src="/images/logo.svg" alt="Mini Golf Logo">
+    <div class="number-of-players">
+      <label for="playerCount">Number of Players:</label>
+      <div class="player-buttons">
+        <button onclick="decrementPlayerCount()">-</button>
+        <span id="playerCount" class="player-value">1</span>
+        <button onclick="incrementPlayerCount()">+</button>
+      </div>
+    </div>
     <button id="startButton">START</button>
     <div class="bottom-text">
         <p>Lost a ball? Ask us for a new one!</p>
-        <p>For your safety: stay off rocks, gardens and waterways.</p>
-        <p>Please ensure a 6 putt maximum to keep play under 1.5 hours.</p>
+        <p>For your safety: stay off rocks and waterways.</p>
+        <p>Six putts max per hole to keep play under 1.5 hours.</p>
     </div>
   </div>
+
+  <script>
+    let playerCount = 1;
+
+    function incrementPlayerCount() {
+      if (playerCount < 5) {
+        playerCount++;
+        document.getElementById('playerCount').innerText = playerCount;
+      }
+    }
+
+    function decrementPlayerCount() {
+      if (playerCount > 1) {
+        playerCount--;
+        document.getElementById('playerCount').innerText = playerCount;
+      }
+    }
+  </script>
 </body>
 </html>
