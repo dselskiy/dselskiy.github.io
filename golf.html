@@ -54,7 +54,6 @@
       border: none;
       border-radius: 5px;
       padding: 8px 16px;
-      
       position: absolute; /* slide Number of Players down*/
       top:45%;
     }
@@ -83,26 +82,24 @@
     table {
       border-collapse: collapse;
       width: 100%; /* Adjusted width */
-      margin: 0px auto; /* Center the table */
+      margin: 0 auto; /* Center the table */
     }
     th, td {
-      
       text-align: center;
       padding: 16px; /* Increased padding */
       font-size: 24px; /* Increased font size */
-    }
+      margin: 0;
 
+    }
     th {
         background-color: #00a3e6;
         color: black;
-    
     }
     th:first-child, td:first-child {
       position: sticky;
       left: 0;
       background-color: #00a3e6;
       color: black;
-      padding: 5px;
       z-index: 1;
     }
     th:last-child, td:last-child {
@@ -110,7 +107,6 @@
       right: 0;
       background-color: #00a3e6;
       color: black;
-      padding: 5px;
       z-index: 1;
     }
     .editable-name {
@@ -126,12 +122,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 10px 0px 10px 10px; /* Increased padding */
       color: white;
     }
     .shot-count button {
       font-size: 30px;
-      padding: 10px 10px; /* Increased padding */
-      border-radius:5px;
+      padding: 10px; /* Increased padding */
       background-color: black;
       border-color: transparent;
       color: white;
