@@ -78,6 +78,7 @@
       top: 0; /* Placing the table at the top */
       background-color: black; /* Match background color */
       z-index: 1; /* Ensure it's above other content */
+      scroll-snap-type: mandatory;
     }
     table {
       border-collapse: collapse;
@@ -89,33 +90,39 @@
       padding: 16px; /* Increased padding */
       font-size: 24px; /* Increased font size */
       margin: 0;
-
+      scroll-snap-align: start;
     }
     th {
         background-color: #00a3e6;
-        color: black;
+        color: white;
     }
     th:first-child, td:first-child {
       position: sticky;
       left: 0;
-      background-color: #00a3e6;
-      color: black;
+      background-color: black;
+      color: white;
       z-index: 1;
+    }
+    th:first-child {
+      background-color: #00a3e6;
     }
     th:last-child, td:last-child {
       position: sticky;
       right: 0;
-      background-color: #00a3e6;
-      color: black;
+      background-color: black;
+      color: white;
       z-index: 1;
     }
+    th:last-child{
+      background-color: #00a3e6;
+    }
     .editable-name {
-      width: 100px; /* Set width for editable names */
+      width: 80px; /* Set width for editable names */
       text-align: center;
       border: none;
       outline: none;
-      background-color: #00a3e6;
-      color: black;
+      background-color: black;
+      color: white;
       font-size: 20px; /* Increased font size */
     }
     .shot-count {
@@ -150,6 +157,7 @@
         <p>Lost a ball? Ask us for a new one!</p>
         <p>For your safety: stay off rocks and waterways.</p>
         <p>Six putts max per hole to keep play under 1.5 hours.</p>
+        <p>Reloading the page will reset your scores.</p>
         <p>⛳DAN⛳</p>
     </div>
   </div>
