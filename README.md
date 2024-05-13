@@ -1,6 +1,5 @@
 <body>
-<h1>Hello World</h1>
-<p>Idfgdgf.</p>
-  <img src="/images/cascade.png" alt="cascade golf logo";">
+<h1>Welcome</h1>
+<p></p>
 </body>
 </html>
