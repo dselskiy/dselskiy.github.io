@@ -1,7 +1,7 @@
 <html>
 <body>
 <h1>Welcome</h1>
-
+[CascadeMiniPutting](dselsky.github.io/golf.html)
 </body>
-<p>[CascadeMiniPutting](dselsky.github.io/golf.html)</p>
+[CascadeMiniPutting](dselsky.github.io/golf.html
 </html>
