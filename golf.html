@@ -40,9 +40,11 @@
 			}
 			.player-buttons button {
 				background-color: transparent;
-				font-size: 45px;
+				font-size: 30px;
 				border: none;
-				color: white;
+				color: transparent;
+				text-shadow: 0 0 0 white;
+				vertical-align: 5px;
 			}
 			#startButton {
 				font-size: 60px;
@@ -156,9 +158,9 @@
 			<div class="number-of-players">
 				<label for="playerCount">PLAYERS</label>
 				<div class="player-buttons">
-					<button onclick="decrementPlayerCount()">-</button>
+					<button onclick="decrementPlayerCount()">➖</button>
 					<span id="playerCount" class="player-value">1</span>
-					<button onclick="incrementPlayerCount()">+</button>
+					<button onclick="incrementPlayerCount()">➕</button>
 				</div>
 			</div>
 			<button id="startButton" onclick="startGame()">⛳ START ⛳</button>
