@@ -11,6 +11,8 @@
 			body,
 			html {
 				margin: 0;
+				padding: 0;
+				height: 100%;
 				font-family: Arial, sans-serif;
 				background-color: #00a3e6; /* Set background color */
 			}
@@ -26,30 +28,21 @@
 			}
 			.number-of-players {
 				text-align: center;
-				background-color: #00a3e6;
+				background-color: transparent;
 				color: white;
 				font-size: 30px;
-				position: fixed; /* slide Number of Players down*/
+				position: absolute; /* slide Number of Players down*/
 				top: 45%;
 			}
-			.player-buttons button1 {
-				font-size: 45px;
-				color: white;
+			.player-buttons {
 				background-color: transparent;
-				cursor: pointer;
-				vertical-align: 3px;
+				font-size: 45px;
 			}
-			.player-buttons button2 {
+			.player-buttons button {
+				background-color: transparent;
 				font-size: 45px;
+				border: none;
 				color: white;
-				background-color: transparent;
-				cursor: pointer;
-				vertical-align: baseline;		
-			}
-			.player-buttons span {
-				background-color: transparent;
-				font-size: 45px;
-				vertical-align: baseline;
 			}
 			#startButton {
 				font-size: 60px;
@@ -163,10 +156,9 @@
 			<div class="number-of-players">
 				<label for="playerCount">PLAYERS</label>
 				<div class="player-buttons">
-					<button1 onclick="decrementPlayerCount()">-</button1>
+					<button onclick="decrementPlayerCount()">-</button>
 					<span id="playerCount" class="player-value">1</span>
-					<button2 onclick="incrementPlayerCount()">+</button2>
-					
+					<button onclick="incrementPlayerCount()">+</button>
 				</div>
 			</div>
 			<button id="startButton" onclick="startGame()">⛳ START ⛳</button>
