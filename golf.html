@@ -20,6 +20,7 @@
 				display: flex;
 				flex-direction: column;
 				align-items: center;
+				text-align: center;
 				height: 100%;
 			}
 			#logo {
@@ -27,24 +28,21 @@
 				max-height: 40%;
 			}
 			.number-of-players {
-				text-align: center;
-				background-color: transparent;
 				color: white;
 				font-size: 30px;
-				position: absolute; /* slide Number of Players down*/
+				position: absolute;
 				top: 45%;
 			}
 			.player-buttons {
-				background-color: transparent;
 				font-size: 45px;
 			}
 			.player-buttons button {
-				background-color: transparent;
 				font-size: 30px;
 				border: none;
 				color: transparent;
 				text-shadow: 0 0 0 white;
 				vertical-align: 5px;
+				background: none;
 			}
 			#startButton {
 				font-size: 60px;
@@ -56,7 +54,7 @@
 				cursor: pointer;
 				position: fixed;
 				top: 60%;
-				padding: 5px 0px 5px 0px;
+				padding: 5px 0;
 			}
 			.bottom-text {
 				text-align: center;
@@ -92,6 +90,7 @@
 			table {
 				border-collapse: collapse;
 				width: 100%; /* Adjusted width */
+				background-color: black;
 			}
 			th,
 			td {
@@ -105,7 +104,6 @@
 				left: 0;
 				z-index: 1;
 			}
-
 			th:last-child,
 			td:last-child {
 				position: sticky;
@@ -114,16 +112,20 @@
 				color: white;
 				z-index: 1;
 			}
+
+			td:first-child {
+				background-color: black;
+			}
+
 			th:last-child {
 				background-color: #00a3e6;
+				color: white;
 			}
 			th {
 				background-color: #00a3e6;
 				color: white;
 			}
-			td:first-child {
-				background-color: black;
-			}
+
 			.editable-name {
 				width: 80px; /* Set width for editable names */
 				text-align: center;
@@ -137,7 +139,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				padding: 0px 0px 0px 10px; /* Increased padding */
+				padding-left: 10px; /* Increased padding */
 				color: white;
 			}
 			.shot-count button {
@@ -176,6 +178,7 @@
 			document.getElementById("resetButton").style.display = "none";
 			let playerCount = 1;
 
+			// Increase player count
 			function incrementPlayerCount() {
 				if (playerCount < 5) {
 					playerCount++;
@@ -184,6 +187,7 @@
 				}
 			}
 
+			// Decrease player count
 			function decrementPlayerCount() {
 				if (playerCount > 1) {
 					playerCount--;
@@ -192,8 +196,8 @@
 				}
 			}
 
+			// Start the game and set up the scorecard table
 			function startGame() {
-				// Hide elements
 				document.getElementById("logo").style.display = "none";
 				document.querySelector(".number-of-players").style.display =
 					"none";
@@ -201,7 +205,6 @@
 				document.getElementById("resetButton").style.display = "block";
 				document.body.style.background = "black";
 
-				// Create table dynamically
 				const scorecardContainer = document.createElement("div");
 				scorecardContainer.classList.add("scorecard-container");
 
@@ -222,7 +225,6 @@
 				const totalHeader = document.createElement("th");
 				totalHeader.textContent = "TOTAL";
 				headerRow.appendChild(totalHeader);
-
 				thead.appendChild(headerRow);
 
 				// Create player rows
@@ -280,20 +282,19 @@
 					const totalCell = document.createElement("td");
 					totalCell.textContent = "0";
 					playerRow.appendChild(totalCell);
-
 					tbody.appendChild(playerRow);
 				}
 
 				table.appendChild(thead);
 				table.appendChild(tbody);
 				scorecardContainer.appendChild(table);
-
 				document.body.appendChild(scorecardContainer);
 
 				// Load scorecard data from localStorage if available
 				loadScorecard();
 			}
 
+			// Decrement the shot count
 			function decrementShotCount(container) {
 				const shotCountDisplay = container.querySelector("span");
 				let count = parseInt(shotCountDisplay.textContent);
@@ -304,6 +305,7 @@
 				}
 			}
 
+			// Increment the shot count
 			function incrementShotCount(container) {
 				const shotCountDisplay = container.querySelector("span");
 				let count = parseInt(shotCountDisplay.textContent);
@@ -314,6 +316,7 @@
 				}
 			}
 
+			// Update the total score for a player
 			function updateTotal(container) {
 				const playerRow = container.parentNode.parentNode;
 				const shotCountCells =
@@ -326,6 +329,7 @@
 				totalCell.textContent = total;
 			}
 
+			// Save the scorecard data to localStorage
 			function saveScorecard() {
 				const scorecardData = [];
 				const rows = document.querySelectorAll("tbody tr");
@@ -349,6 +353,7 @@
 				);
 			}
 
+			// Load the scorecard data from localStorage
 			function loadScorecard() {
 				const scorecardData = JSON.parse(
 					localStorage.getItem("scorecardData")
@@ -369,12 +374,13 @@
 				});
 			}
 
+			// Reset the game and clear localStorage
 			function resetGame() {
 				localStorage.removeItem("scorecardData");
 				location.reload();
 			}
 
-			// Check if there's existing data and automatically start the game if there is
+			// Automatically start the game if scorecard data is available
 			window.onload = () => {
 				const scorecardData = JSON.parse(
 					localStorage.getItem("scorecardData")
