@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mini Golf Score Card</title>
   <style>
     body, html {
       margin: 0;
@@ -19,17 +18,28 @@
       height: 100%;
     }
     #startButton {
-      padding: 8px 16px;
       font-size: 60px;
+      font-weight: bold;
+      background-color: #00a3e6;
+      color: white;
+      border: solid;
+      border-radius: 5px;
+      cursor: pointer;
+      position:absolute;
+      top: 60%;
+    }
+          /* Style for the reset button */
+    #resetButton {
+      font-size: 30px;
       font-weight: bold;
       background-color: #00a3e6;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      margin-bottom: 20px; /* Add margin at the bottom */
-      position:absolute;
-      top: 60%;
+      margin-top: 20px;
+      position: absolute;
+      bottom: 3%;
     }
     #logo {
       max-width: 100%;
@@ -39,7 +49,7 @@
     .bottom-text {
       text-align: center;
       position: absolute;
-      bottom: 1%;
+      bottom: 8%;
       color: #ffffff;
     }
     .bottom-text p {
@@ -47,13 +57,10 @@
     }
     .number-of-players {
       text-align: center;
-      margin-bottom: 10px; /* Add margin to separate from START button */
       background-color: #00a3e6;
       color: white;
       font-size: 30px;
       border: none;
-      border-radius: 5px;
-      padding: 8px 16px;
       position: absolute; /* slide Number of Players down*/
       top:45%;
     }
@@ -62,7 +69,6 @@
       color: white;
       background-color: #00a3e6;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
     .player-buttons {
@@ -73,12 +79,10 @@
     .scorecard-container {
       overflow-x: auto;
       max-width: 100%;
-      margin-top: 0; /* Adjusted margin-top */
       position: fixed;
       top: 0; /* Placing the table at the top */
       background-color: black; /* Match background color */
       z-index: 1; /* Ensure it's above other content */
-      scroll-snap-type: mandatory;
     }
     table {
       border-collapse: collapse;
@@ -89,8 +93,6 @@
       text-align: center;
       padding: 16px; /* Increased padding */
       font-size: 24px; /* Increased font size */
-      margin: 0;
-      scroll-snap-align: start;
     }
     th {
         background-color: #00a3e6;
@@ -120,7 +122,6 @@
       width: 80px; /* Set width for editable names */
       text-align: center;
       border: none;
-      outline: none;
       background-color: black;
       color: white;
       font-size: 20px; /* Increased font size */
@@ -136,9 +137,10 @@
       font-size: 30px;
       padding: 10px; /* Increased padding */
       background-color: black;
-      border-color: transparent;
+      border: none;
       color: white;
     }
+
   </style>
 </head>
 <body>
@@ -152,16 +154,21 @@
         <button onclick="incrementPlayerCount()">+</button>
       </div>
     </div>
-    <button id="startButton" onclick="startGame()">START</button>
+    <button id="startButton" onclick="startGame()">⛳START⛳</button>
+       <button id="resetButton" onclick="resetGame()">New Game</button>
     <div class="bottom-text">
+                <p>⛳DAN⛳</p>
         <p>Lost a ball? Ask us for a new one!</p>
         <p>For your safety: stay off rocks and waterways.</p>
-        <p>⛳DAN⛳</p>
+
+        
     </div>
   </div>
+ 
 
   <script>
-    let playerCount = 1;
+    document.getElementById('resetButton').style.display = 'none';
+      let playerCount = 1;
 
     function incrementPlayerCount() {
       if (playerCount < 5) {
@@ -182,7 +189,9 @@
       document.getElementById('logo').style.display = 'none';
       document.querySelector('.number-of-players').style.display = 'none';
       document.getElementById('startButton').style.display = 'none';
+        document.getElementById('resetButton').style.display = 'block';
       document.body.style.background = 'black';
+        
 
       // Create table dynamically
       const scorecardContainer = document.createElement('div');
@@ -219,6 +228,7 @@
         playerNameInput.setAttribute('maxlength', '8');
         playerNameInput.classList.add('editable-name');
         playerNameInput.value = `Player ${i}`;
+        playerNameInput.addEventListener('input', saveScorecard);
         playerNameCell.appendChild(playerNameInput);
         playerRow.appendChild(playerNameCell);
 
@@ -233,6 +243,7 @@
           decrementButton.textContent = '-';
           decrementButton.addEventListener('click', () => {
             decrementShotCount(shotCountContainer);
+            saveScorecard();
           });
 
           // Create shot count display
@@ -246,6 +257,7 @@
           incrementButton.textContent = '+';
           incrementButton.addEventListener('click', () => {
             incrementShotCount(shotCountContainer);
+            saveScorecard();
           });
 
           shotCountContainer.appendChild(incrementButton);
@@ -266,6 +278,9 @@
       scorecardContainer.appendChild(table);
 
       document.body.appendChild(scorecardContainer);
+
+      // Load scorecard data from localStorage if available
+      loadScorecard();
     }
 
     function decrementShotCount(container) {
@@ -298,6 +313,53 @@
       const totalCell = playerRow.querySelector('td:last-child');
       totalCell.textContent = total;
     }
+
+    function saveScorecard() {
+      const scorecardData = [];
+      const rows = document.querySelectorAll('tbody tr');
+
+      rows.forEach(row => {
+        const playerData = {
+          name: row.querySelector('.editable-name').value,
+          scores: Array.from(row.querySelectorAll('.shot-count span')).map(cell => parseInt(cell.textContent)),
+          total: parseInt(row.querySelector('td:last-child').textContent)
+        };
+        scorecardData.push(playerData);
+      });
+
+      localStorage.setItem('scorecardData', JSON.stringify(scorecardData));
+    }
+
+    function loadScorecard() {
+      const scorecardData = JSON.parse(localStorage.getItem('scorecardData'));
+      if (!scorecardData) return;
+
+      const rows = document.querySelectorAll('tbody tr');
+      scorecardData.forEach((playerData, i) => {
+        const row = rows[i];
+        row.querySelector('.editable-name').value = playerData.name;
+        const shotCountCells = row.querySelectorAll('.shot-count span');
+        playerData.scores.forEach((score, j) => {
+          shotCountCells[j].textContent = score;
+        });
+        row.querySelector('td:last-child').textContent = playerData.total;
+      });
+    }
+
+    function resetGame() {
+      localStorage.removeItem('scorecardData');
+      location.reload();
+    }
+
+    // Check if there's existing data and automatically start the game if there is
+    window.onload = () => {
+      const scorecardData = JSON.parse(localStorage.getItem('scorecardData'));
+      if (scorecardData) {
+        playerCount = scorecardData.length;
+        document.getElementById('playerCount').innerText = playerCount;
+        startGame();
+      }
+    };
   </script>
 </body>
 </html>
