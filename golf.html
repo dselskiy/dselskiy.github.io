@@ -23,10 +23,19 @@
 				text-align: center;
 				height: 100%;
 			}
-			#logo {
-				max-width: 100%;
-				max-height: 40%;
+			#cascade {
+				width: 45%;
+				height: auto;
+				position: absolute;
+				top: 5%;
 			}
+			#logo {
+				width: 20%;
+				height: auto;
+				position: absolute;
+				left: 0;
+			}
+
 			.number-of-players {
 				color: white;
 				background-color: #00a3e6;
@@ -155,9 +164,12 @@
 	<body>
 		<div class="container">
 			<img
-				id="logo"
-				src="/images/cascadepicture.jpg"
+				id="cascade"
+				src="/images/cascadepicture.png"
 				alt="Mini Golf Logo" />
+
+			<img id="logo" src="/images/logo.svg" alt="Mini Golf Logo" />
+
 			<div class="number-of-players">
 				<label for="playerCount">PLAYERS</label>
 				<div class="player-buttons">
@@ -200,6 +212,7 @@
 			// Start the game and set up the scorecard table
 			function startGame() {
 				document.getElementById("logo").style.display = "none";
+				document.getElementById("cascade").style.display = "none";
 				document.querySelector(".number-of-players").style.display =
 					"none";
 				document.getElementById("startButton").style.display = "none";
