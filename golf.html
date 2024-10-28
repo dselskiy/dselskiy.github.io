@@ -1,7 +1,3 @@
-<!-- Cascade Putting Course Scorecard-->
-<!-- built by Dan -->
-<!-- 2024 -->
-
 <!doctype html>
 <html lang="en">
 	<head>
@@ -27,7 +23,7 @@
 				height: 30%;
 				width: auto;
 				position: absolute;
-				top: 5%;
+				top: 22%;
 			}
 			#logo {
 				width: 20%;
@@ -60,7 +56,7 @@
 				background: none;
 			}
 			#startButton {
-				font-size: 60px;
+				font-size: 50px;
 				font-weight: bold;
 				background-color: white;
 				color: #00a3e6;
@@ -97,13 +93,12 @@
 				max-width: 100%;
 				position: fixed;
 				top: 0;
-				background-color: black;
 				z-index: 1;
 			}
 			table {
 				border-collapse: collapse;
 				width: 100%;
-				background-color: black;
+				color: white;
 			}
 			th,
 			td {
@@ -121,13 +116,11 @@
 			td:last-child {
 				position: sticky;
 				right: 0;
-				background-color: black;
+				background-color: #00a3e6;
 				color: white;
 				z-index: 1;
 			}
-			td:first-child {
-				background-color: black;
-			}
+
 			th:last-child {
 				background-color: #00a3e6;
 				color: white;
@@ -159,6 +152,10 @@
 				border: none;
 				color: white;
 			}
+			tr:last-child {
+				background-color: #00a3e6;
+			}
+			
 		</style>
 	</head>
 
@@ -199,10 +196,9 @@
 
 			// Increase player count
 			function incrementPlayerCount() {
-				if (playerCount < 5) {
+				if (playerCount < 6) {
 					playerCount++;
-					document.getElementById("playerCount").innerText =
-						playerCount;
+					document.getElementById("playerCount").innerText = playerCount;
 				}
 			}
 
@@ -210,8 +206,7 @@
 			function decrementPlayerCount() {
 				if (playerCount > 1) {
 					playerCount--;
-					document.getElementById("playerCount").innerText =
-						playerCount;
+					document.getElementById("playerCount").innerText = playerCount;
 				}
 			}
 
@@ -219,8 +214,7 @@
 			function startGame() {
 				document.getElementById("logo").style.display = "none";
 				document.getElementById("cascade").style.display = "none";
-				document.querySelector(".number-of-players").style.display =
-					"none";
+				document.querySelector(".number-of-players").style.display = "none";
 				document.getElementById("startButton").style.display = "none";
 				document.getElementById("resetButton").style.display = "block";
 				document.body.style.background = "black";
@@ -265,13 +259,11 @@
 					// Create shot count cells
 					for (let j = 1; j <= 18; j++) {
 						const shotCountCell = document.createElement("td");
-						const shotCountContainer =
-							document.createElement("div");
+						const shotCountContainer = document.createElement("div");
 						shotCountContainer.classList.add("shot-count");
 
 						// Create decrement button
-						const decrementButton =
-							document.createElement("button");
+						const decrementButton = document.createElement("button");
 						decrementButton.textContent = "-";
 						decrementButton.addEventListener("click", () => {
 							decrementShotCount(shotCountContainer);
@@ -285,8 +277,7 @@
 						shotCountContainer.appendChild(shotCountDisplay);
 
 						// Create increment button
-						const incrementButton =
-							document.createElement("button");
+						const incrementButton = document.createElement("button");
 						incrementButton.textContent = "+";
 						incrementButton.addEventListener("click", () => {
 							incrementShotCount(shotCountContainer);
@@ -298,34 +289,55 @@
 						playerRow.appendChild(shotCountCell);
 					}
 
-					// Create total cell
+					// Create total score cell
 					const totalCell = document.createElement("td");
 					totalCell.textContent = "0";
 					playerRow.appendChild(totalCell);
+
 					tbody.appendChild(playerRow);
 				}
+
+				// Create "Best Ball" row at the bottom
+				const bestBallRow = document.createElement("tr");
+				bestBallRow.id = "best-ball-row";
+
+				const bestBallLabelCell = document.createElement("th");
+				bestBallLabelCell.textContent = "Best Ball";
+				bestBallRow.appendChild(bestBallLabelCell);
+
+				for (let i = 1; i <= 18; i++) {
+					const bestBallCell = document.createElement("td");
+					bestBallCell.id = `best-ball-hole-${i}`;
+					bestBallCell.textContent = "0"; // Default score
+					bestBallRow.appendChild(bestBallCell);
+				}
+
+				const bestBallTotalCell = document.createElement("td");
+				bestBallTotalCell.id = "best-ball-total";
+				bestBallTotalCell.textContent = "0"; // Default total score
+				bestBallRow.appendChild(bestBallTotalCell);
+
+				tbody.appendChild(bestBallRow); // Append best ball row to tbody
 
 				table.appendChild(thead);
 				table.appendChild(tbody);
 				scorecardContainer.appendChild(table);
 				document.body.appendChild(scorecardContainer);
-
-				// Load scorecard data from localStorage if available
 				loadScorecard();
 			}
 
-			// Decrement the shot count
-			function decrementShotCount(container) {
-				const shotCountDisplay = container.querySelector("span");
-				let count = parseInt(shotCountDisplay.textContent);
-				if (count > 0) {
-					count--;
-					shotCountDisplay.textContent = count;
-					updateTotal(container);
-				}
+			// Update total for a player
+			function updateTotal(container) {
+				const playerRow = container.closest("tr");
+				let total = 0;
+				const shotCountSpans = playerRow.querySelectorAll(".shot-count span");
+				shotCountSpans.forEach((span) => {
+					total += parseInt(span.textContent);
+				});
+				playerRow.lastElementChild.textContent = total;
 			}
 
-			// Increment the shot count
+			// Increment shot count
 			function incrementShotCount(container) {
 				const shotCountDisplay = container.querySelector("span");
 				let count = parseInt(shotCountDisplay.textContent);
@@ -333,85 +345,115 @@
 					count++;
 					shotCountDisplay.textContent = count;
 					updateTotal(container);
+					updateBestBall(); // Update best ball after increment
 				}
 			}
 
-			// Update the total score for a player
-			function updateTotal(container) {
-				const playerRow = container.parentNode.parentNode;
-				const shotCountCells =
-					playerRow.querySelectorAll(".shot-count span");
-				let total = 0;
-				shotCountCells.forEach((cell) => {
-					total += parseInt(cell.textContent);
-				});
-				const totalCell = playerRow.querySelector("td:last-child");
-				totalCell.textContent = total;
+			// Decrement shot count
+			function decrementShotCount(container) {
+				const shotCountDisplay = container.querySelector("span");
+				let count = parseInt(shotCountDisplay.textContent);
+				if (count > 0) {
+					count--;
+					shotCountDisplay.textContent = count;
+					updateTotal(container);
+					updateBestBall(); // Update best ball after decrement
+				}
 			}
+			
+			// Update Best Ball row based on lowest scores for each hole
+			function updateBestBall() {
+				let bestBallTotal = 0;
 
-			// Save the scorecard data to localStorage
-			function saveScorecard() {
-				const scorecardData = [];
-				const rows = document.querySelectorAll("tbody tr");
+				for (let hole = 1; hole <= 18; hole++) {
+					let lowestScore = Infinity; // Start with a large number
 
-				rows.forEach((row) => {
-					const playerData = {
-						name: row.querySelector(".editable-name").value,
-						scores: Array.from(
-							row.querySelectorAll(".shot-count span")
-						).map((cell) => parseInt(cell.textContent)),
-						total: parseInt(
-							row.querySelector("td:last-child").textContent
-						)
-					};
-					scorecardData.push(playerData);
-				});
-
-				localStorage.setItem(
-					"scorecardData",
-					JSON.stringify(scorecardData)
-				);
-			}
-
-			// Load the scorecard data from localStorage
-			function loadScorecard() {
-				const scorecardData = JSON.parse(
-					localStorage.getItem("scorecardData")
-				);
-				if (!scorecardData) return;
-
-				const rows = document.querySelectorAll("tbody tr");
-				scorecardData.forEach((playerData, i) => {
-					const row = rows[i];
-					row.querySelector(".editable-name").value = playerData.name;
-					const shotCountCells =
-						row.querySelectorAll(".shot-count span");
-					playerData.scores.forEach((score, j) => {
-						shotCountCells[j].textContent = score;
+					// Loop through each player's score for this hole
+					document.querySelectorAll("tbody tr").forEach((row) => {
+						const shotCountCell = row.querySelector(
+							`td:nth-child(${hole + 1}) .shot-count span`
+						);
+						if (shotCountCell) {
+							const score = parseInt(shotCountCell.textContent);
+							if (score < lowestScore) {
+								lowestScore = score;
+							}
+						}
 					});
-					row.querySelector("td:last-child").textContent =
-						playerData.total;
-				});
-			}
 
-			// Reset the game and clear localStorage
-			function resetGame() {
-				localStorage.removeItem("scorecardData");
-				location.reload();
-			}
+					// Update the best ball cell for this hole
+					const bestBallCell = document.getElementById(`best-ball-hole-${hole}`);
+					bestBallCell.textContent = lowestScore;
 
-			// Automatically start the game if scorecard data is available
-			window.onload = () => {
-				const scorecardData = JSON.parse(
-					localStorage.getItem("scorecardData")
-				);
-				if (scorecardData) {
-					playerCount = scorecardData.length;
-					document.getElementById("playerCount").innerText =
-						playerCount;
-					startGame();
+					// Add to the total best ball score
+					bestBallTotal += lowestScore;
 				}
-			};
+
+				// Update the best ball total cell
+				document.getElementById("best-ball-total").textContent = bestBallTotal;
+			}
+
+			// Reset the game and reload the page
+			function resetGame() {
+				localStorage.removeItem("scorecard");
+				window.location.reload();
+			}
+
+			// Save scorecard data to local storage
+			function saveScorecard() {
+				const scorecardData = {
+					playerCount: playerCount,
+					players: [],
+				};
+
+				const rows = document.querySelectorAll("tbody tr");
+				rows.forEach((row, index) => {
+					const playerName = row.querySelector(".editable-name")?.value || "";
+					const total = row.lastElementChild.textContent;
+					const scores = Array.from(row.querySelectorAll(".shot-count span")).map(
+						(span) => span.textContent
+					);
+
+					scorecardData.players.push({
+						playerName,
+						total,
+						scores,
+					});
+				});
+
+				localStorage.setItem("scorecard", JSON.stringify(scorecardData));
+			}
+
+			// Load scorecard data from local storage
+			function loadScorecard() {
+				const savedScorecard = localStorage.getItem("scorecard");
+				if (savedScorecard) {
+					const { playerCount: savedPlayerCount, players } = JSON.parse(
+						savedScorecard
+					);
+
+					playerCount = savedPlayerCount;
+					document.getElementById("playerCount").textContent = playerCount;
+
+					const rows = document.querySelectorAll("tbody tr");
+					players.forEach((player, index) => {
+						const row = rows[index];
+						const playerNameInput = row.querySelector(".editable-name");
+						if (playerNameInput) {
+							playerNameInput.value = player.playerName;
+						}
+
+						const shotCountSpans = row.querySelectorAll(".shot-count span");
+						player.scores.forEach((score, scoreIndex) => {
+							shotCountSpans[scoreIndex].textContent = score;
+						});
+
+						row.lastElementChild.textContent = player.total;
+					});
+				}
+			}
+
+
 		</script>
 	</body>
 </html>
